@@ -33,13 +33,25 @@ Conversation history is maintained within each session, so follow-up questions w
 ```
 === AI Expense Chat ===
 Ask anything about your spending. Type 'quit' to exit.
-You: How much have I spent on food total?
-Assistant: Based on your expense history, you've spent $284.50 on Food across 9 entries.
-You: Which month was the most expensive?
-Assistant: March was your highest-spending month at $412.00, driven largely by Shopping and Bills.
+
 You: Where can I cut back?
-Assistant: Entertainment appears most frequently relative to its necessity — 6 entries totaling $138.00.
-You might also review the 3 "Other" entries ($97.50) which lack descriptions, making them harder to evaluate.
+
+Assistant: Based on this single day of expenses, potential areas to cut back are:
+
+1. Shopping: You spent $500.00, which is a significant portion of your overall expenditure.
+2. Bills: While necessary, you might consider negotiating a lower bill or spreading the payment over multiple days if possible.
+
+To make a more informed decision, I would need more expense data from previous days to identify any trends or patterns.
+
+You: What is my average spending on food?
+
+Assistant: You spent $40.00, $20.00, $100.00, and $35.99 on food. To calculate the average, I will add these amounts and divide by 4.
+
+$40.00 + $20.00 = $60.00
+$60.00 + $100.00 = $160.00
+$160.00 + $35.99 = $195.99
+
+Average food spending: $195.99 / 4 = $49.00
 ```
 ---
 ## Project structure
