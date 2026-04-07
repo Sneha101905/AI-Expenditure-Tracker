@@ -3,9 +3,9 @@ import sys
 from datetime import datetime
 
 try:
-    import anthropic
+    import google.generativeai as genai
 except ImportError:
-    anthropic = None
+    genai = None
 
 
 def main():
@@ -34,19 +34,20 @@ def main():
             sys.exit(0)
         else:
             print("Invalid choice. Please try again.")
-            
+
+
 # Implementing AI chatbot
 def chat_with_expenses():
     """Let the user ask natural-language questions about their spending."""
-    if anthropic is None:
-        print("\nThe 'anthropic' package is not installed.")
-        print("Run:  pip install anthropic")
+    if genai is None:
+        print("\nThe 'google-generativeai' package is not installed.")
+        print("Run:  pip install google-generativeai")
         return
 
-    api_key = input("\nEnter your Anthropic API key (or set ANTHROPIC_API_KEY env var): ").strip()
+    import os
+    api_key = input("\nEnter your Gemini API key (or set GEMINI_API_KEY env var): ").strip()
     if not api_key:
-        import os
-        api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+        api_key = os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
         print("No API key provided. Returning to menu.")
         return
@@ -70,8 +71,12 @@ def chat_with_expenses():
         f"Here is the user's full expense history:\n\n{expense_data}"
     )
 
-    client = anthropic.Anthropic(api_key=api_key)
-    conversation = []
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        system_instruction=system_prompt,
+    )
+    chat = model.start_chat(history=[])
 
     print("\n=== AI Expense Chat ===")
     print("Ask anything about your spending. Type 'quit' to exit.\n")
@@ -88,28 +93,15 @@ def chat_with_expenses():
             print("Exiting chat.")
             break
 
-        conversation.append({"role": "user", "content": user_input})
-
         try:
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=1000,
-                system=system_prompt,
-                messages=conversation,
-            )
-            reply = response.content[0].text
-            conversation.append({"role": "assistant", "content": reply})
+            response = chat.send_message(user_input)
+            reply = response.text
             print(f"\nAssistant: {reply}\n")
 
-        except anthropic.AuthenticationError:
-            print("\nInvalid API key. Please check and try again.")
-            break
-        except anthropic.APIConnectionError:
-            print("\nCould not connect to the API. Check your internet connection.")
-            break
         except Exception as e:
             print(f"\nSomething went wrong: {e}")
             break
+
 
 def add_expense():
     categories = [
