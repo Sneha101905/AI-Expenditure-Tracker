@@ -3,9 +3,9 @@ import sys
 from datetime import datetime
 
 try:
-    import google.generativeai as genai
+    from groq import Groq
 except ImportError:
-    genai = None
+    Groq = None
 
 
 def main():
@@ -39,15 +39,15 @@ def main():
 # Implementing AI chatbot
 def chat_with_expenses():
     """Let the user ask natural-language questions about their spending."""
-    if genai is None:
-        print("\nThe 'google-generativeai' package is not installed.")
-        print("Run:  pip install google-generativeai")
+    if Groq is None:
+        print("\nThe 'groq' package is not installed.")
+        print("Run:  pip install groq")
         return
 
     import os
-    api_key = input("\nEnter your Gemini API key (or set GEMINI_API_KEY env var): ").strip()
+    api_key = input("\nEnter your Groq API key (or set GROQ_API_KEY env var): ").strip()
     if not api_key:
-        api_key = os.environ.get("GEMINI_API_KEY", "")
+        api_key = os.environ.get("GROQ_API_KEY", "")
     if not api_key:
         print("No API key provided. Returning to menu.")
         return
@@ -57,7 +57,6 @@ def chat_with_expenses():
         print("\nNo expenses found. Add some expenses first.")
         return
 
-    # Build a plain-text summary of all expenses to send as context
     lines = ["Date, Category, Amount, Description"]
     for e in expenses:
         lines.append(f"{e[0]}, {e[1]}, ${float(e[2]):.2f}, {e[3]}")
@@ -71,12 +70,8 @@ def chat_with_expenses():
         f"Here is the user's full expense history:\n\n{expense_data}"
     )
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(
-        model_name="gemini-2.5-pro",
-        system_instruction=system_prompt,
-    )
-    chat = model.start_chat(history=[])
+    client = Groq(api_key=api_key)
+    conversation = [{"role": "system", "content": system_prompt}]
 
     print("\n=== AI Expense Chat ===")
     print("Ask anything about your spending. Type 'quit' to exit.\n")
@@ -93,9 +88,16 @@ def chat_with_expenses():
             print("Exiting chat.")
             break
 
+        conversation.append({"role": "user", "content": user_input})
+
         try:
-            response = chat.send_message(user_input)
-            reply = response.text
+            response = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=conversation,
+                max_tokens=1000,
+            )
+            reply = response.choices[0].message.content
+            conversation.append({"role": "assistant", "content": reply})
             print(f"\nAssistant: {reply}\n")
 
         except Exception as e:
