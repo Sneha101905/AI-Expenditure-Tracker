@@ -1,12 +1,12 @@
 # AI Expenditure Tracker
-A Python command-line tool to log, view, and analyze personal spending, extended with an AI-powered natural language interface via the Gemini API.
+A Python command-line tool to log, view, and analyze personal spending, extended with an AI-powered natural language interface via the Groq API.
 Ask questions like "How much did I spend on food last month?" or "Where can I cut back?" and get answers from your expense data.
 Built as the final project for [HarvardX CS50P](https://cs50.harvard.edu/python/), then extended with an LLM-powered chat feature.
 ## Features
 - Add expenses with amount, category, description, and date
 - View a full expense history in a formatted table
 - Analyze spending by category with percentages and totals
-- Chat with your expenses in plain English using Gemini (Google AI API)
+- Chat with your expenses in plain English using LLaMA 3 (Groq API)
 ## Setup
 **1. Clone the repository**
 ```bash
@@ -15,19 +15,19 @@ cd ai-expenditure-tracker
 ```
 **2. Install dependencies**
 ```bash
-pip install google-generativeai
+pip install groq
 ```
-**3. Get a Gemini API key**
-Sign up at [aistudio.google.com](https://aistudio.google.com) and create an API key. You can either paste it when prompted by the program, or set it as an environment variable:
+**3. Get a Groq API key**
+Sign up at [console.groq.com](https://console.groq.com) and create a free API key. You can either paste it when prompted by the program, or set it as an environment variable:
 ```bash
-export GEMINI_API_KEY="your-key-here"
+export GROQ_API_KEY="your-key-here"
 ```
 **4. Run the tracker**
 ```bash
 python project_personal.py
 ```
 ## How it works
-Expenses are stored locally in an `expenses.csv` file. When you open the AI chat (option 4), your complete expense history is formatted and sent to Gemini as context alongside your question. The model reasons over your real data to generate answers.
+Expenses are stored locally in an `expenses.csv` file. When you open the AI chat (option 4), your complete expense history is formatted and sent to LLaMA 3 as context alongside your question. The model reasons over your real data to generate answers.
 Conversation history is maintained within each session, so follow-up questions work naturally.
 ## Example chat session
 ```
@@ -53,6 +53,6 @@ You might also review the 3 "Other" entries ($97.50) which lack descriptions, ma
 ---
 ## Technologies used
 - Python 3
-- [Google Generative AI Python SDK](https://github.com/google/generative-ai-python)
-- Gemini (gemini-1.5-flash)
+- [Groq Python SDK](https://github.com/groq/groq-python)
+- LLaMA 3 (llama3-8b-8192) via Groq
 - CSV for local data storage
