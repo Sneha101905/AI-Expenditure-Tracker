@@ -1,0 +1,3 @@
+PIP-Installable Libraries used in the Project:
+    1. pytest
+    2. black for style
