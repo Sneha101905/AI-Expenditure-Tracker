@@ -6,7 +6,7 @@ Built as the final project for [HarvardX CS50P](https://cs50.harvard.edu/python/
 - Add expenses with amount, category, description, and date
 - View a full expense history in a formatted table
 - Analyze spending by category with percentages and totals
-- Chat with your expenses in plain English using LLaMA 3 (Groq API)
+- Chat with your expenses in plain English using LLaMA 3.1 (Groq API)
 ## Setup
 **1. Clone the repository**
 ```bash
@@ -27,7 +27,7 @@ export GROQ_API_KEY="your-key-here"
 python project_personal.py
 ```
 ## How it works
-Expenses are stored locally in an `expenses.csv` file. When you open the AI chat (option 4), your complete expense history is formatted and sent to LLaMA 3 as context alongside your question. The model reasons over your real data to generate answers.
+Expenses are stored locally in an `expenses.csv` file. When you open the AI chat (option 4), your complete expense history is formatted and sent to LLaMA 3.1 as context alongside your question. The model reasons over your real data to generate answers.
 Conversation history is maintained within each session, so follow-up questions work naturally.
 ## Example chat session
 ```
@@ -54,5 +54,5 @@ You might also review the 3 "Other" entries ($97.50) which lack descriptions, ma
 ## Technologies used
 - Python 3
 - [Groq Python SDK](https://github.com/groq/groq-python)
-- LLaMA 3 (llama3-8b-8192) via Groq
+- LLaMA 3.1 (llama-3.1-8b-instant) via Groq
 - CSV for local data storage
